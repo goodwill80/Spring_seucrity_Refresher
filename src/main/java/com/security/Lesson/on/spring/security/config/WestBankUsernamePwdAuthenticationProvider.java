@@ -19,7 +19,7 @@ import java.util.List;
 public class WestBankUsernamePwdAuthenticationProvider implements AuthenticationProvider {
 
     @Autowired
-    CustomerRepository customerRepository;
+    CustomerRepository<A, Number> customerRepository;
 
     @Autowired
     PasswordEncoder passwordEncoder;

@@ -1,9 +1,7 @@
 package com.security.Lesson.on.spring.security.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
@@ -13,8 +11,13 @@ public class Customer {
     @GenericGenerator(name="native", strategy = "native")
     private Long id;
     private String email;
+    @Column(name = "mobile_number")
+    private String mobileNumber;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String pwd;
     private String role;
+    @Column(name = "create_dt")
+    private String createDt;
 
 
     public Long getId() {
@@ -47,5 +50,21 @@ public class Customer {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getMobileNumber() {
+        return mobileNumber;
+    }
+
+    public void setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
+    }
+
+    public String getCreateDt() {
+        return createDt;
+    }
+
+    public void setCreateDt(String createDt) {
+        this.createDt = createDt;
     }
 }

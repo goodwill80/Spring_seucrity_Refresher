@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class LoginController {
     @Autowired
-    CustomerRepository customerRepository;
+    CustomerRepository<A, Number> customerRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
