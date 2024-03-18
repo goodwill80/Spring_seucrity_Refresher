@@ -17,7 +17,7 @@ public class LoanController {
     @Autowired
     private LoanRepository loanRepository;
 
-    @GetMapping("/myLoans")
+    @GetMapping("/loan")
     public ResponseEntity<List<Loans>> getLoanDetails(@RequestParam int id) {
         List<Loans> loans = loanRepository.findByCustomerIdOrderByStartDtDesc(id);
         if (loans != null ) {
