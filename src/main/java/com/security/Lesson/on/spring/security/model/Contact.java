@@ -12,7 +12,7 @@ import java.util.Date;
 public class Contact {
     @Id
     @Column(name = "contact_id")
-    private Long contactId;
+    private String contactId;
 
     @Column(name = "contact_name")
     private String contactName;
@@ -27,11 +27,11 @@ public class Contact {
     @Column(name = "create_dt")
     private Date createDt;
 
-    public Long getContactId() {
+    public String getContactId() {
         return contactId;
     }
 
-    public void setContactId(Long contactId) {
+    public void setContactId(String contactId) {
         this.contactId = contactId;
     }
 

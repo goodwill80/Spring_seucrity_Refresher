@@ -10,6 +10,7 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name="native", strategy = "native")
     private Long id;
+    private String name;
     private String email;
     @Column(name = "mobile_number")
     private String mobileNumber;
@@ -66,5 +67,13 @@ public class Customer {
 
     public void setCreateDt(String createDt) {
         this.createDt = createDt;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
