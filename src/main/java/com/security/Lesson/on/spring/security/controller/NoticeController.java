@@ -22,6 +22,7 @@ public class NoticeController {
         List<Notice> notices = noticeRepository.findAllActiveNotices();
         if (notices != null ) {
             return ResponseEntity.ok()
+                    // For next 60 secs please do not invoke the notice api and use the same data
                     .cacheControl(CacheControl.maxAge(60, TimeUnit.SECONDS))
                     .body(notices);
         }else {

@@ -32,7 +32,7 @@ public class SecurityConfig {
                     @Override
                     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                         CorsConfiguration config = new CorsConfiguration();
-                        config.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
+                        config.setAllowedOrigins(Collections.singletonList("http://localhost:5173"));
                         config.setAllowedMethods(Collections.singletonList("*"));
                         config.setAllowCredentials(true);
                         config.setAllowedHeaders(Collections.singletonList("*"));
@@ -40,7 +40,11 @@ public class SecurityConfig {
                         return config;
                     }
                 }))
-                .csrf(csrf -> csrf.disable())
+                // csrf protection is only for post, put and delete methods, it does not restrict get methods, hence there is no need for "/notice"
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/contact", "/register")
+                )
+//                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                                 .requestMatchers("/account", "/balance", "/loan", "/card", "/user").authenticated()
                                 .requestMatchers("/notice", "/contact", "/register").permitAll()
