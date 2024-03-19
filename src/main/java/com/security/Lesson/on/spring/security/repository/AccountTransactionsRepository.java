@@ -1,12 +1,13 @@
 package com.security.Lesson.on.spring.security.repository;
 
+import com.security.Lesson.on.spring.security.model.AccountTransactions;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface AccountTransactions extends CrudRepository<AccountTransactions, Long> {
+public interface AccountTransactionsRepository extends CrudRepository<AccountTransactions, Long> {
 
     List<AccountTransactions> findByCustomerIdOrderByTransactionDtDesc(int customerId);
 }

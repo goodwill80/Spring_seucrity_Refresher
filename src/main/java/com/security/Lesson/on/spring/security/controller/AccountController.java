@@ -3,6 +3,10 @@ package com.security.Lesson.on.spring.security.controller;
 import com.security.Lesson.on.spring.security.model.Accounts;
 import com.security.Lesson.on.spring.security.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,15 +15,20 @@ import org.springframework.web.bind.annotation.RestController;
 public class AccountController {
 
     @Autowired
-    AccountRepository accountRepository;
+
+    private AccountRepository accountRepository;
 
     @GetMapping("/account")
-    public Accounts getAccountDetails(@RequestParam int id ) {
-        Accounts accounts = accountRepository.findByCustomerId(id);
-        if(accounts != null) {
-            return accounts;
+    public ResponseEntity<Accounts> getAccountDetails(@RequestParam int id) {
+        Accounts account = accountRepository.findByCustomerId(id);
+        if(account != null) {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(account);
         } else {
-            return null;
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(null);
         }
 
     }
