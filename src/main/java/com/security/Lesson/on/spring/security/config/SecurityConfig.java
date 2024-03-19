@@ -1,11 +1,13 @@
 package com.security.Lesson.on.spring.security.config;
 
+import com.security.Lesson.on.spring.security.filter.CsrfCookieFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,6 +17,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -27,7 +32,16 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+        CsrfTokenRequestAttributeHandler requestHandler = new CsrfTokenRequestAttributeHandler();
+        requestHandler.setCsrfRequestAttributeName("_csrf");
+
         return http
+                .securityContext(security -> security
+                        .requireExplicitSave(false) //  auto store the authentication details to security context
+                ).sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                )
                 .cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
                     @Override
                     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
@@ -43,7 +57,13 @@ public class SecurityConfig {
                 // csrf protection is only for post, put and delete methods, it does not restrict get methods, hence there is no need for "/notice"
                 .csrf(csrf -> csrf
                         .ignoringRequestMatchers("/contact", "/register")
+                        // Generate the csrf token
+                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) // "withHttpOnlyFalse" - allow client code to read the http-only cookie value
                 )
+                // This filter adds the CSRF token back into the response to be sent back to the client
+                // This line tells spring to execute the CsrfCookieFilter after the BasicAuthentication filter - i.e. after login
+                .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
+
 //                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                                 .requestMatchers("/account", "/balance", "/loan", "/card", "/user").authenticated()

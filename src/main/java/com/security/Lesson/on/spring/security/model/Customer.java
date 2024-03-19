@@ -9,7 +9,8 @@ public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name="native", strategy = "native")
-    private Long id;
+    @Column(name = "customer_id")
+    private Long customerId;
     private String name;
     private String email;
     @Column(name = "mobile_number")
@@ -22,11 +23,11 @@ public class Customer {
 
 
     public Long getId() {
-        return id;
+        return customerId;
     }
 
     public void setId(Long id) {
-        this.id = id;
+        this.customerId = id;
     }
 
     public String getEmail() {
